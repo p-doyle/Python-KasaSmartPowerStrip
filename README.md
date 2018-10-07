@@ -1,4 +1,4 @@
-# Python-KasaSmartPowerStrip
+# Simple Python library to control the TP-Link Kasa Smart Power Strip
 
 Simple Python library to control the TP-Link Kasa Smart Power Strip<br/>
 Amazon link: https://www.amazon.com/Smart-Wi-Fi-Power-Strip-TP-Link/dp/B07G95FFN3/
