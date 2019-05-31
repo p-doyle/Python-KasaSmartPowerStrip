@@ -68,7 +68,7 @@ To setup a new power strip without having to use the Kasa App(which requires you
 ```
 power_strip = SmartPowerStrip('192.168.0.1')
 
-print(power_stripset_cloud_server_url(server_url=''))
+print(power_strip.set_cloud_server_url(server_url=''))
 
 print(power_strip.get_system_info()['system']['get_sysinfo']['mac'])
 ```
