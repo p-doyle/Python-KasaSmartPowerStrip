@@ -1,4 +1,4 @@
-# Python-KasaSmartPowerStrip
+# Simple Python library to control the TP-Link Kasa Smart Power Strip
 
 Simple Python library to control the TP-Link Kasa Smart Power Strip<br/>
 Amazon link: https://www.amazon.com/Smart-Wi-Fi-Power-Strip-TP-Link/dp/B07G95FFN3/
@@ -54,7 +54,7 @@ print(power_strip.reboot(5))
 ```
 
 ## Initial Setup
-To setup a new power strip without having to use the Kasa App, which requires you to create a cloud account:
+To setup a new power strip without having to use the Kasa App(which requires you to create a cloud account):
 1. Plug the power strip in and ensure that the status LED is alternating green/orange.  If it isn't press and <br/>
     hold one of the relay buttons for 5 seconds to perform a factory reset.
 2. Look for and connect to a WiFi network which should start with TP-LINK_Power Strip.<br/>
@@ -68,7 +68,7 @@ To setup a new power strip without having to use the Kasa App, which requires yo
 ```
 power_strip = SmartPowerStrip('192.168.0.1')
 
-print(power_stripset_cloud_server_url(server_url=''))
+print(power_strip.set_cloud_server_url(server_url=''))
 
 print(power_strip.get_system_info()['system']['get_sysinfo']['mac'])
 ```
