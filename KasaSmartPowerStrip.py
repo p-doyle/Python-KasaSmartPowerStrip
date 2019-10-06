@@ -216,26 +216,26 @@ class SmartPowerStrip(object):
     def _encrypt_command(string, prepend_length=True):
 
         key = 171
-        result = ''
+        result = b''
 
         # when sending get_sysinfo using udp the length of the command is not needed but
         #  with all other commands using tcp it is
         if prepend_length:
-            result = struct.pack('>I', len(string))
+            result = b'\0\0\0' + bytes([len(string)])
 
-        for i in string:
-            a = key ^ ord(i)
+        for i in bytes(string.encode('latin-1')):
+            a = key ^ i
             key = a
-            result += chr(a)
+            result += bytes([a])
         return result
 
     @staticmethod
     def _decrypt_command(string):
 
         key = 171
-        result = ''
-        for i in string:
-            a = key ^ ord(i)
-            key = ord(i)
-            result += chr(a)
-        return result
+        result = b''
+        for i in bytes(string):
+            a = key ^ i
+            key = i
+            result += bytes([a])
+        return result.decode('latin-1')
