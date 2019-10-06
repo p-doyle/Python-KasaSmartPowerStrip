@@ -60,10 +60,13 @@ To setup a new power strip without having to use the Kasa App(which requires you
 2. Look for and connect to a WiFi network which should start with TP-LINK_Power Strip.<br/>
     The default IP of the power strip is 192.168.0.1.  It will only accept commands from IP 192.168.0.100, which<br/>
     it should assign to the first device to connect to its WiFi.
-3. OPTIONAL: If you want to ensure that the power strip never connects to the cloud there are 2 options. <br/>
+3. OPTIONAL: If you want to ensure that the power strip never connects to the cloud there are a few options. <br/>
     The first is to clear the cloud server URL that is set on the power strip but I can't guarantee that this works. </br>
-    The second is to get the  mac address of the power strip so that you can block outgoing traffic on your <br/>
-    router before allowing it to connect to your network.
+    UPDATE: It seems setting the server_url blank does not work and the device will still attempt to connect to n-devs.tplinkcloud.com </br>
+    The second is to get the  mac address of the power strip so that you can block outgoing traffic on your 
+    router before allowing it to connect to your network or to use VLANs to prevent it from connecting to the internet </br>
+    If it has no internet access however it will be constantly making NTP requests, which may be required for the historical </br>
+    usage data to work correctly, though I can't say for sure. 
 
 ```
 power_strip = SmartPowerStrip('192.168.0.1')
