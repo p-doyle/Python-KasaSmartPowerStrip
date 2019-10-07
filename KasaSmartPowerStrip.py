@@ -1,7 +1,7 @@
 import socket
 import json
 import struct
-
+from builtins import bytes
 
 class SmartPowerStrip(object):
 
