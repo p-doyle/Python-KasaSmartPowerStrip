@@ -8,7 +8,10 @@ Encrypt/Decrypt code is based on https://github.com/softScheck/tplink-smartplug/
 The main difference seems to be that the basic get_sysinfo command only works over UDP, all other commands<br/>
 can use either UDP or TCP
 
-Now compatible with Python3 as well as Python2.7.  Tested with Python2.7 and Python3.6
+Now compatible with Python3 as well as Python2.7.  Tested with Python2.7 and Python3.6.  To work with Python2.7 the
+future package must be installed:
+
+```pip intsall future```
 
 ## Example code:
 
