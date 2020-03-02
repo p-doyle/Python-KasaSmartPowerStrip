@@ -208,7 +208,7 @@ class SmartPowerStrip(object):
 
         client_socket.sendto(self._encrypt_command(command, prepend_length=False), addr)
 
-        data, server = client_socket.recvfrom(1024)
+        data, server = client_socket.recvfrom(2048)
 
         return json.loads(self._decrypt_command(data))
 
