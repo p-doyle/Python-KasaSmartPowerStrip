@@ -11,7 +11,7 @@ can use either UDP or TCP
 Now compatible with Python3 as well as Python2.7.  Tested with Python2.7 and Python3.6.  To work with Python2.7 the
 future package must be installed:
 
-```pip intsall future```
+```pip install future```
 
 ## Example code:
 
