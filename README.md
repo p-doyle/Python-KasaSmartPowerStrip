@@ -67,7 +67,7 @@ To setup a new power strip without having to use the Kasa App(which requires you
     The first is to clear the cloud server URL that is set on the power strip but I can't guarantee that this works. </br>
     UPDATE: It seems setting the server_url blank does not work and the device will still attempt to connect to n-devs.tplinkcloud.com.     I would recommend using something like [PiHole](https://github.com/pi-hole/pi-hole) for DNS where you can blacklist n-devs.tplinkcloud.com to prevent the switch from resolving it to an IP address.
     </br>
-    The second is to get the  mac address of the power strip so that you can block outgoing traffic on your 
+    The second option is to get the  mac address of the power strip so that you can block outgoing traffic on your 
     router before allowing it to connect to your network or to use VLANs to prevent it from connecting to the internet </br>
     If it has no internet access however it will be constantly making NTP requests, which may be required for the historical </br>
     usage data to work correctly, though I can't say for sure. 
