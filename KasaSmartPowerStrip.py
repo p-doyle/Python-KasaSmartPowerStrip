@@ -13,11 +13,9 @@ class SmartPowerStrip(object):
         self.sys_info = None
         self.timeout = timeout
 
-        # if the device ID isn't supplied it needs to be queried from
-        # the device before any commands can be sent
+        self.sys_info = self.get_system_info()['system']['get_sysinfo']
+
         if not self.device_id:
-            sys_info = self.get_system_info()
-            self.sys_info = sys_info['system']['get_sysinfo']
             self.device_id = self.sys_info['deviceId']
 
     def set_wifi_credentials(self, ssid, psk, key_type='3'):
