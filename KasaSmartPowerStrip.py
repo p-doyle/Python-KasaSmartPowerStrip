@@ -219,7 +219,7 @@ class SmartPowerStrip(object):
         # when sending get_sysinfo using udp the length of the command is not needed but
         #  with all other commands using tcp it is
         if prepend_length:
-            result = b'\0\0\0' + bytes([len(string)])
+            result = struct.pack(">I", len(string))
 
         for i in bytes(string.encode('latin-1')):
             a = key ^ i
