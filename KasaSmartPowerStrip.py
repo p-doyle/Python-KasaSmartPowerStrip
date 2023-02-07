@@ -1,7 +1,11 @@
-import socket
 import json
 import struct
 from builtins import bytes
+
+# these 2 libraries are specific to Circuit Python
+from socketpool import SocketPool
+import wifi
+
 
 class SmartPowerStrip(object):
 
@@ -12,6 +16,9 @@ class SmartPowerStrip(object):
         self.device_id = device_id
         self.sys_info = None
         self.timeout = timeout
+
+        # create a socket pool using the wifi radio
+        self.socket_pool = SocketPool(wifi.radio)
 
         self.sys_info = self.get_system_info()['system']['get_sysinfo']
 
@@ -85,7 +92,8 @@ class SmartPowerStrip(object):
 
     def get_plug_info(self, plug_num):
 
-        target_plug = [plug for plug in self.sys_info['children'] if plug['id'] == str(int(plug_num)-1).zfill(2)]
+        # WARNING: circuit python does not support str.zfill so manually padding the plug id #
+        target_plug = [plug for plug in self.sys_info['children'] if plug['id'] == '0' + str(int(plug_num)-1)]
 
         return target_plug
 
@@ -109,7 +117,7 @@ class SmartPowerStrip(object):
         plug_id = self._get_plug_id(plug_num=plug_num, plug_name=plug_name)
 
         relay_command = '{"context":{"child_ids":["' + plug_id + '"]},' + \
-                    '"system":{"set_relay_state":{"state":' + str(state_int) + '}}}'
+                        '"system":{"set_relay_state":{"state":' + str(state_int) + '}}}'
 
         return self.send_command(relay_command, self.protocol)
 
@@ -170,7 +178,8 @@ class SmartPowerStrip(object):
     def _get_plug_id(self, plug_num=None, plug_name=None):
 
         if plug_num and self.device_id:
-            plug_id = self.device_id + str(plug_num-1).zfill(2)
+            # WARNING: circuit python does not support str.zfill so manually padding the plug id #
+            plug_id = self.device_id + '0' + str(plug_num-1)
 
         elif plug_name and self.sys_info:
             target_plug = [plug for plug in self.sys_info['children'] if plug['alias'] == plug_name]
@@ -185,30 +194,32 @@ class SmartPowerStrip(object):
 
     def _tcp_send_command(self, command):
 
-        sock_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock_tcp = self.socket_pool.socket(self.socket_pool.AF_INET, self.socket_pool.SOCK_STREAM)
         sock_tcp.settimeout(self.timeout)
         sock_tcp.connect((self.ip, self.port))
 
         sock_tcp.send(self._encrypt_command(command))
 
-        data = sock_tcp.recv(2048)
+        data_buffer = bytearray(2048)
+        data_size = sock_tcp.recv_into(data_buffer)
         sock_tcp.close()
 
         # the first 4 chars are the length of the command so can be excluded
-        return json.loads(self._decrypt_command(data[4:]))
+        return json.loads(self._decrypt_command(data_buffer[4:data_size]))
 
     def _udp_send_command(self, command):
 
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        client_socket = self.socket_pool.socket(self.socket_pool.AF_INET, self.socket_pool.SOCK_DGRAM)
         client_socket.settimeout(self.timeout)
 
         addr = (self.ip, self.port)
 
         client_socket.sendto(self._encrypt_command(command, prepend_length=False), addr)
 
-        data, server = client_socket.recvfrom(2048)
+        data_buffer = bytearray(2048)
+        data_size, server = client_socket.recvfrom_into(data_buffer)
 
-        return json.loads(self._decrypt_command(data))
+        return json.loads(self._decrypt_command(data_buffer[:data_size]))
 
     @staticmethod
     def _encrypt_command(string, prepend_length=True):
