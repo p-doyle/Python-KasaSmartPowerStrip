@@ -13,6 +13,8 @@ future package must be installed:
 
 ```pip install future```
 
+Also now compatible with [Adafruit's CircuitPython](https://circuitpython.org/) under the [CircuitPython branch](https://github.com/p-doyle/Python-KasaSmartPowerStrip/tree/CircuitPython).
+
 ## Example code:
 
 ```
